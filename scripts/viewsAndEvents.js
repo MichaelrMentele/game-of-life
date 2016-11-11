@@ -24,7 +24,7 @@ function createCells(rows, cols) {
 	}
 }
 
-function kill(cell) {
+function killInView(cell) {
 	cell.setAttribute("class", "dead");
 }
 
@@ -41,7 +41,6 @@ function bindEventHandlers(gameManager, playing) {
 		var rowcol = this.id.split("_");
 		var row = rowcol[0];
 		var col = rowcol[1];
-		console.log("fired");
 		var classes = this.getAttribute("class");
 		if (classes.indexOf("live") > -1) {
 			this.setAttribute("class", "dead");
@@ -52,12 +51,16 @@ function bindEventHandlers(gameManager, playing) {
 		}
 	});
 
+	// ERROR: The grid is not being cleared here
 	$("#clear").on("click", function(event) {
 		event.preventDefault();
 		playing = false; 
 
+		gameManager.grid.reset();
+		gameManager.nextGrid.reset();
+
 		$("td").each(function(idx, cell){
-			kill(cell);
+			killInView(cell);
 		})
 	});
 
